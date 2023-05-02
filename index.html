@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Anime4K Player</title>
+  <script src='Anime4K.js'></script>
+  <style>
+    body {
+      overscroll-behavior: none;
+      background-color: black;
+    }
+
+    .r-mfzc6t,
+    .r-1e6zz2d {
+      background-color: transparent !important;
+      color: transparent !important;
+    }
+
+    #input {
+      position: absolute;
+      z-index: 10;
+    }
+
+    #velocity-canvas {
+      max-height: 100%;
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body onload="onLoad();">
+
+  <div id=input>
+    <input type="file" onchange="onSelectFile(this);"><br>
+    <button onclick="toggleCanvas()">Disable Anime4K</button>
+  </div>
+
+  <div id="vilos"></div>
+
+  <script type="text/javascript" src="https://static.crunchyroll.com/vilos-v2/web/vilos/js/bundle.js"
+    charset="utf-8"></script>
+  <script>
+    toggleCanvas();
+    function toggleCanvas() {
+      const canvas = document.querySelector('canvas');
+      canvas.style.display = canvas.style.display === 'none' ? '' : 'none';
+      const button = document.querySelector('button');
+      button.textContent = canvas.style.display === 'none' ? 'Enable Anime4K' : 'Disable Anime4K';
+    }
+  </script>
+
+</body>
+
+</html>
