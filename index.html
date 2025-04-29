@@ -2,115 +2,58 @@
 <html>
 
 <head>
-    <title>Anime4K Player</title>
-    <script src="Anime4K.js" type="module"></script>
-    <style>
-        body {
-            overscroll-behavior: none;
-            background-color: black;
-        }
+  <title>Anime4K Player</title>
+  <script src='Anime4K.js'></script>
+  <style>
+    body {
+      overscroll-behavior: none;
+      background-color: black;
+    }
 
-        #controls {
-            position: absolute;
-            z-index: 10;
-            top: 0px;
-            left: 0px;
-        }
+    #input {
+      position: absolute;
+      z-index: 10;
+    }
 
-        #shaderSelectContainer {
-            position: absolute;
-            top: 0px;
-            right: 0px;
-            z-index: 10;
-        }
+    #velocity-canvas {
+      max-height: 100%;
+      max-width: 100%;
+    }
 
-        #velocity-canvas {
-            max-height: 100%;
-            max-width: 100%;
-        }
+    .css-1dbjc4n.r-mfzc6t.r-xrw6rh.r-1t68eob.r-qpntkw.r-633pao.r-u8s1d,
+    .css-1dbjc4n.r-1pi2tsx.r-1d2f490.r-6dt33c.r-u8s1d.r-ipm5af.r-13qz1uu,
+    .css-1dbjc4n.r-1p0dtai.r-1d2f490.r-6dt33c.r-12vffkv.r-u8s1d.r-zchlnj.r-ipm5af,
+    .css-901oao.r-jwli3a.r-1w6e6rj.r-15lhr44.r-1i10wst.r-1kfrs79.r-eaezby.r-1ye8kvj.r-1pn2ns4.r-ul2aug,
+    .css-1dbjc4n.r-1awozwy.r-1niwhzg.r-13awgt0.r-18u37iz.r-4rl0ck.r-1wtj0ep.r-15lccwe.r-u8s1d.r-1nd9uzx.r-1w2ooi2 {
+      display: none !important;
+    }
 
-        .css-1dbjc4n.r-mfzc6t.r-xrw6rh.r-1t68eob.r-qpntkw.r-633pao.r-u8s1d,
-        .css-1dbjc4n.r-1pi2tsx.r-1d2f490.r-6dt33c.r-u8s1d.r-ipm5af.r-13qz1uu,
-        .css-1dbjc4n.r-1p0dtai.r-1d2f490.r-6dt33c.r-12vffkv.r-u8s1d.r-zchlnj.r-ipm5af,
-        .css-901oao.r-jwli3a.r-1w6e6rj.r-15lhr44.r-1i10wst.r-1kfrs79.r-eaezby.r-1ye8kvj.r-1pn2ns4.r-ul2aug,
-        .css-1dbjc4n.r-1awozwy.r-1niwhzg.r-13awgt0.r-18u37iz.r-4rl0ck.r-1wtj0ep.r-15lccwe.r-u8s1d.r-1nd9uzx.r-1w2ooi2 {
-            display: none !important;
-        }
-
-        :fullscreen .css-1dbjc4n.r-1p0dtai.r-9njtsq.r-17s6mgv.r-1d2f490.r-u8s1d.r-zchlnj:not(:hover) {
-            opacity: 0 !important;
-        }
-
-        select {
-            padding: 5px;
-        }
-    </style>
+    :fullscreen .css-1dbjc4n.r-1p0dtai.r-9njtsq.r-17s6mgv.r-1d2f490.r-u8s1d.r-zchlnj:not(:hover) {
+      opacity: 0 !important;
+    }
+  </style>
 </head>
 
-<body>
+<body onload="onLoad();">
 
-    <div id="controls">
-        <input type="file" onchange="onSelectFile(this);"><br>
-        <!-- <button onclick="toggleCanvas()">Disable Anime4K</button> -->
-    </div>
+  <div id=input>
+    <input type="file" onchange="onSelectFile(this);"><br>
+    <button onclick="toggleCanvas()">Disable Anime4K</button>
+  </div>
 
-    <div id="shaderSelectContainer">
-        <select id="shaderSelect">
-            <option value="Deblur-DoG">Original</option>
-            <option value="Mode A">Mode A</option>
-            <option value="Mode B">Mode B</option>
-            <option value="Mode C">Mode C</option>
-            <option value="Mode A+A">Mode A+A</option>
-            <option value="Mode B+B">Mode B+B</option>
-            <option value="Mode C+A">Mode C+A</option>
-            <option value="Deblur-DoG">Deblur-DoG</option>
-            <option value="Restore-CNNUL">Restore-CNNUL</option>
-            <option value="Restore-GANUUL">Restore-GANUUL</option>
-            <option value="Upscale-GANx3L">Upscale-GANx3L</option>
-            <option value="Upscale-CNNx2UL">Upscale-CNNx2UL</option>
-            <option value="Upscale-GANx4UUL">Upscale-GANx4UUL</option>
-            <option value="Denoise-BilateralMean">Denoise-BilateralMean</option>
-        </select>
-    </div>
+  <div id="vilos"></div>
 
-    <div id="vilos"></div>
-
-    <script type="text/javascript" src="https://static.crunchyroll.com/vilos-v2/web/vilos/js/bundle.js"
-        charset="utf-8"></script>
-
-    <script>
-        toggleCanvas();
-        function toggleCanvas() {
-            const canvas = document.querySelector('#velocity-canvas');
-            const button = document.querySelector('button');
-
-            if (!canvas) {
-                console.error('Canvas not found.');
-                return;
-            }
-
-            const isHidden = canvas.style.display === 'none';
-            canvas.style.display = isHidden ? '' : 'none';
-            button.textContent = isHidden ? 'Disable Anime4K' : 'Enable Anime4K';
-        }
-
-        function onSelectFile(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    injectVideoIntoPlayer(e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function injectVideoIntoPlayer(src) {
-            const videoElement = document.querySelector('video');
-            videoElement.src = src;
-            videoElement.load();
-            videoElement.play();
-        }
-    </script>
+  <script type="text/javascript" src="https://static.crunchyroll.com/vilos-v2/web/vilos/js/bundle.js"
+    charset="utf-8"></script>
+  <script>
+    toggleCanvas();
+    function toggleCanvas() {
+      const canvas = document.querySelector('canvas');
+      canvas.style.display = canvas.style.display === 'none' ? '' : 'none';
+      const button = document.querySelector('button');
+      button.textContent = canvas.style.display === 'none' ? 'Enable Anime4K' : 'Disable Anime4K';
+    }
+  </script>
 
 </body>
 
