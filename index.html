@@ -80,6 +80,46 @@
 
     <script>
         toggleCanvas();
+
+        const shaderSelect = document.querySelector('#shaderSelect');
+        const shaderModes = [
+            "Original",
+            "Mode A",
+            "Mode B",
+            "Mode C",
+            "Mode A+A",
+            "Mode B+B",
+            "Mode C+A",
+            "Deblur-DoG",
+            "Restore-CNNUL",
+            "Restore-GANUUL",
+            "Upscale-GANx3L",
+            "Upscale-CNNx2UL",
+            "Upscale-GANx4UUL",
+            "Denoise-BilateralMean"
+        ];
+
+        // Map keys to shader modes (customize as you like)
+        const shaderHotkeys = {
+            "0": "Original",
+            "1": "Mode A",
+            "2": "Mode B",
+            "3": "Mode C",
+            "4": "Mode A+A",
+            "5": "Mode B+B",
+            "6": "Mode C+A",
+        };
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            if (shaderHotkeys[key]) {
+                const mode = shaderHotkeys[key];
+                shaderSelect.value = mode;
+                shaderSelect.dispatchEvent(new Event('change')); // trigger same logic as dropdown
+                console.log(`Shader switched to: ${mode}`);
+            }
+        });
+
         function toggleCanvas() {
             const canvas = document.querySelector('#velocity-canvas');
             const button = document.querySelector('button');
