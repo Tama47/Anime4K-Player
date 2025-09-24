@@ -3,7 +3,6 @@
 
 <head>
     <title>Anime4K Player</title>
-    <script src="Anime4K.js" type="module"></script>
     <style>
         body {
             overscroll-behavior: none;
@@ -45,18 +44,19 @@
             padding: 5px;
         }
     </style>
+  <script type="module" crossorigin src="Anime4K.js"></script>
 </head>
 
 <body>
 
     <div id="controls">
         <input type="file" onchange="onSelectFile(this);"><br>
-        <button onclick="toggleCanvas()">Disable Anime4K</button>
+        <!-- <button onclick="toggleCanvas()">Disable Anime4K</button> -->
     </div>
 
     <div id="shaderSelectContainer">
         <select id="shaderSelect">
-            <option value="Original">Original</option>
+            <option value="Deblur-DoG">Original</option>
             <option value="Mode A">Mode A</option>
             <option value="Mode B">Mode B</option>
             <option value="Mode C">Mode C</option>
@@ -80,45 +80,6 @@
 
     <script>
         toggleCanvas();
-
-        const shaderSelect = document.querySelector('#shaderSelect');
-        const shaderModes = [
-            "Original",
-            "Mode A",
-            "Mode B",
-            "Mode C",
-            "Mode A+A",
-            "Mode B+B",
-            "Mode C+A",
-            "Deblur-DoG",
-            "Restore-CNNUL",
-            "Restore-GANUUL",
-            "Upscale-GANx3L",
-            "Upscale-CNNx2UL",
-            "Upscale-GANx4UUL",
-            "Denoise-BilateralMean"
-        ];
-
-        const shaderHotkeys = {
-            "0": "Original",
-            "1": "Mode A",
-            "2": "Mode B",
-            "3": "Mode C",
-            "4": "Mode A+A",
-            "5": "Mode B+B",
-            "6": "Mode C+A",
-        };
-
-        document.addEventListener('keydown', (event) => {
-            const key = event.key.toLowerCase();
-            if (shaderHotkeys[key]) {
-                const mode = shaderHotkeys[key];
-                shaderSelect.value = mode;
-                shaderSelect.dispatchEvent(new Event('change'));
-                console.log(`Shader switched to: ${mode}`);
-            }
-        });
-
         function toggleCanvas() {
             const canvas = document.querySelector('#velocity-canvas');
             const button = document.querySelector('button');
